@@ -20,15 +20,14 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        $allUsers = User::query()->select(['id', 'name','username', 'email'])->latest('id');
-
+        $allUsers = User::query()->select(['id', 'name','username', 'email'])->latest('id')->get();
         if ($request->ajax()) {
             $data = DataTables::of($allUsers)
             ->addIndexColumn()
             ->addColumn('action', function ($user) {
                 $editRoute = route('user.edit', ['id' => $user->id]);
                 $deleteRoute = route('user.destroy', ['id' => $user->id]);
-                $csrfToken = csrf_token(); // Generate CSRF token dynamically
+                $csrfToken = csrf_token(); 
                 return <<<HTML
                 <a href="{$editRoute}" class="btn btn-sm btn-dark" title="Edit">Edit</a>
                 <form action="{$deleteRoute}" method="POST" style="display:inline-block;">

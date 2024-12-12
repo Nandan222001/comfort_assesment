@@ -53,6 +53,7 @@ class User extends Authenticatable
     protected static function booted()
     {
         static::saved(function ($user) {
+            
             $payload = request()->all();
             event(new UserSaved($user, $payload));
         });
